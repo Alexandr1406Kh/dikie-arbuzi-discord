@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Дикие арбузы — Панель сервера</title>
+  <style>
+    :root {
+      --bg: #050505;
+      --card: #0c0c0c;
+      --border: rgba(255,255,255,0.18);
+      --text: #f0f0f0;
+      --muted: #888;
+      --accent: #ffffff;
+      --green: #4ade80;
+      --red: #f87171;
+      --glow: 0 0 30px rgba(255,255,255,0.15);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ========== LOADING SCREEN ========== */
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      transition: opacity 0.8s ease, visibility 0.8s;
+    }
+
+    #loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .watermelon-wrap {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .watermelon {
+      width: 110px;
+      height: 110px;
+      transition: all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      filter: grayscale(1) brightness(0.7);
+    }
+
+    .watermelon.glow {
+      filter: grayscale(0) brightness(1.15) drop-shadow(0 0 25px rgba(255,80,80,0.6)) drop-shadow(0 0 50px rgba(80,200,80,0.4));
+      transform: scale(1.15);
+    }
+
+    .watermelon.explode {
+      opacity: 0;
+      transform: scale(1.8);
+      filter: brightness(3);
+    }
+
+    .loader-text {
+      margin-top: 28px;
+      font-size: 0.95rem;
+      color: #666;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeIn 0.6s 0.3s forwards;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* Explosion particles */
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #fff;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    /* ========== BACKGROUND STARS ========== */
+    .stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .star {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      opacity: 0.7;
+      animation: twinkle ease-in-out infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.95; transform: scale(1.3); }
+    }
+
+    /* ========== MAIN APP ========== */
+    #app {
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+      min-height: 100vh;
+    }
+
+    #app.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Header */
+    .header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      background: #111;
+    }
+
+    .brand-text h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-text span {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .user-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .user-chip:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: #fff;
+    }
+
+    .user-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #333, #111);
+      border: 1px solid #555;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+    }
+
+    /* Tabs */
+    .tabs {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      gap: 4px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tab {
+      padding: 14px 22px;
+      font-size: 0.95rem;
+      color: var(--muted);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+      position: relative;
+    }
+
+    .tab:hover { color: #ccc; }
+    .tab.active {
+      color: #fff;
+      border-bottom-color: #fff;
+    }
+
+    /* Content */
+    .content {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px 20px 60px;
+    }
+
+    .panel {
+      display: none;
+      animation: panelIn 0.45s ease;
+    }
+
+    .panel.active { display: block; }
+
+    @keyframes panelIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ========== STATS ========== */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 16px;
+      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255,255,255,0.35);
+      box-shadow: var(--glow);
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-value {
+      font-size: 1.55rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .stat-sub {
+      font-size: 0.75rem;
+      color: #666;
+      margin-top: 4px;
+    }
+
+    /* Search */
+    .search-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .search-input {
+      flex: 1;
+      background: #000;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: #fff;
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.12);
+    }
+
+    .search-input::placeholder { color: #555; }
+
+    /* Members table */
+    .members-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .members-header {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .members-header h3 {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .members-count {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    th {
+      text-align: left;
+      padding: 12px 16px;
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+    }
+
+    td {
+      padding: 13px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      vertical-align: middle;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    tr {
+      transition: background 0.15s;
+    }
+
+    tr:hover td {
+      background: rgba(255,255,255,0.03);
+    }
+
+    .member-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2a2a2a, #111);
+      border: 1px solid #444;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .member-name {
+      font-weight: 500;
+    }
+
+    .member-role {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      border: 1px solid var(--border);
+      color: #ccc;
+    }
+
+    .empty-state {
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    /* ========== REPORT ========== */
+    .report-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .form-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 24px;
+      box-shadow: var(--glow);
+    }
+
+    .form-card h2 {
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+      text-align: center;
+    }
+
+    .form-card .desc {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.88rem;
+      color: #ccc;
+    }
+
+    .required { color: var(--red); }
+
+    input[type="text"],
+    textarea,
+    select {
+      width: 100%;
+      background: #000;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: #fff;
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.12);
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white'%3E%3Cpath d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+    }
+
+    select option { background: #111; }
+
+    .hint {
+      font-size: 0.75rem;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    .btn {
+      width: 100%;
+      margin-top: 8px;
+      padding: 13px;
+      background: #000;
+      color: #fff;
+      border: 1px solid #fff;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn:hover:not(:disabled) {
+      background: #fff;
+      color: #000;
+      box-shadow: 0 0 24px rgba(255,255,255,0.3);
+    }
+
+    .btn:active:not(:disabled) { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .status {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      text-align: center;
+      display: none;
+    }
+
+    .status.success {
+      display: block;
+      border: 1px solid var(--green);
+      background: rgba(74,222,128,0.08);
+      color: var(--green);
+    }
+
+    .status.error {
+      display: block;
+      border: 1px solid var(--red);
+      background: rgba(248,113,113,0.08);
+      color: var(--red);
+    }
+
+    /* ========== LOGIN MODAL ========== */
+    #loginModal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 5000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(6px);
+    }
+
+    #loginModal.show { display: flex; }
+
+    .modal-card {
+      background: #0a0a0a;
+      border: 1px solid #fff;
+      border-radius: 16px;
+      padding: 32px 28px;
+      width: 100%;
+      max-width: 380px;
+      animation: modalIn 0.35s ease;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.92) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-card h2 {
+      font-size: 1.25rem;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .modal-card p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: center;
+      margin-bottom: 22px;
+      line-height: 1.45;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: #444;
+      font-size: 0.78rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .header-inner { flex-wrap: wrap; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .tab { padding: 12px 14px; font-size: 0.88rem; }
+      th, td { padding: 10px 12px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- LOADER -->
+  <div id="loader">
+    <div class="watermelon-wrap" id="wmWrap">
+      <!-- SVG Watermelon (B&W → color) -->
+      <svg class="watermelon" id="watermelon" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Outer rind -->
+        <circle cx="60" cy="60" r="54" fill="#222" stroke="#888" stroke-width="3"/>
+        <!-- Green rind (will appear on glow) -->
+        <circle cx="60" cy="60" r="50" fill="#1a1a1a" class="rind"/>
+        <!-- White layer -->
+        <circle cx="60" cy="60" r="42" fill="#2a2a2a"/>
+        <!-- Red flesh -->
+        <circle cx="60" cy="60" r="36" fill="#333" class="flesh"/>
+        <!-- Seeds -->
+        <ellipse cx="48" cy="50" rx="3" ry="5" fill="#111" transform="rotate(-25 48 50)"/>
+        <ellipse cx="68" cy="45" rx="3" ry="5" fill="#111" transform="rotate(15 68 45)"/>
+        <ellipse cx="55" cy="68" rx="3" ry="5" fill="#111" transform="rotate(-10 55 68)"/>
+        <ellipse cx="72" cy="65" rx="2.5" ry="4.5" fill="#111" transform="rotate(30 72 65)"/>
+        <ellipse cx="42" cy="62" rx="2.5" ry="4.5" fill="#111" transform="rotate(-40 42 62)"/>
+        <!-- Stripes hint -->
+        <path d="M20 40 Q40 30 60 35" stroke="#444" stroke-width="2" fill="none" opacity="0.5"/>
+        <path d="M25 80 Q50 90 75 75" stroke="#444" stroke-width="2" fill="none" opacity="0.5"/>
+      </svg>
+    </div>
+    <div class="loader-text">Дикие арбузы</div>
+  </div>
+
+  <!-- Background stars (populated by JS) -->
+  <div class="stars" id="stars"></div>
+
+  <!-- LOGIN MODAL -->
+  <div id="loginModal">
+    <div class="modal-card">
+      <h2>Вход на сервер</h2>
+      <p>При первой авторизации укажи свой Discord-ник. Он будет использоваться в жалобах и статистике.</p>
+      <div class="form-group">
+        <label for="loginNick">Discord ник</label>
+        <input type="text" id="loginNick" placeholder="Например: Player#1234" maxlength="32" />
+      </div>
+      <button class="btn" id="loginBtn">Войти</button>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div id="app">
+    <header class="header">
+      <div class="header-inner">
+        <div class="brand">
+          <div class="brand-icon">🍉</div>
+          <div class="brand-text">
+            <h1>Дикие арбузы</h1>
+            <span>Панель сервера</span>
+          </div>
+        </div>
+        <div class="user-chip" id="userChip" title="Сменить аккаунт">
+          <div class="user-avatar" id="userAvatar">?</div>
+          <span id="userName">Гость</span>
+        </div>
+      </div>
+    </header>
+
+    <nav class="tabs">
+      <button class="tab active" data-tab="stats">Статистика</button>
+      <button class="tab" data-tab="report">Репорт</button>
+    </nav>
+
+    <main class="content">
+      <!-- STATS PANEL -->
+      <section class="panel active" id="panel-stats">
+        <div class="stats-grid" id="statsGrid">
+          <!-- filled by JS -->
+        </div>
+
+        <div class="search-bar">
+          <input type="text" class="search-input" id="searchInput" placeholder="Поиск участника по нику..." />
+        </div>
+
+        <div class="members-card">
+          <div class="members-header">
+            <h3>Участники сервера</h3>
+            <span class="members-count" id="membersCount">0 участников</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Участник</th>
+                  <th>Сообщений</th>
+                  <th>Голосовые часы</th>
+                  <th>Роль</th>
+                </tr>
+              </thead>
+              <tbody id="membersBody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- REPORT PANEL -->
+      <section class="panel" id="panel-report">
+        <div class="report-layout">
+          <div class="form-card">
+            <h2>Подать жалобу</h2>
+            <p class="desc">Жалоба уйдёт администрации в Discord</p>
+
+            <form id="reportForm">
+              <div class="form-group">
+                <label for="playerNick">Ник игрока <span class="required">*</span></label>
+                <input type="text" id="playerNick" placeholder="Например: Player#1234" required maxlength="64" />
+              </div>
+
+              <div class="form-group">
+                <label for="reason">Причина <span class="required">*</span></label>
+                <select id="reason" required>
+                  <option value="" disabled selected>Выберите причину</option>
+                  <option value="Читы / макросы">Читы / макросы</option>
+                  <option value="Оскорбления / токсичность">Оскорбления / токсичность</option>
+                  <option value="Спам / реклама">Спам / реклама</option>
+                  <option value="Нарушение правил сервера">Нарушение правил сервера</option>
+                  <option value="Мошенничество">Мошенничество</option>
+                  <option value="Другое">Другое</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="description">Описание <span class="required">*</span></label>
+                <textarea id="description" placeholder="Подробно опишите, что произошло..." required maxlength="1500"></textarea>
+                <div class="hint">Максимум 1500 символов</div>
+              </div>
+
+              <div class="form-group">
+                <label for="evidence">Доказательства (ссылки)</label>
+                <textarea id="evidence" placeholder="Ссылки на скрины, видео, сообщения..." maxlength="1000"></textarea>
+              </div>
+
+              <button type="submit" class="btn" id="submitBtn">Отправить жалобу</button>
+            </form>
+
+            <div class="status" id="status"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Дикие арбузы · 2026 · Данные обновляются ботом
+    </footer>
+  </div>
+
+  <script>
+    // ================== CONFIG ==================
+    const WEBHOOK_URL = "ВСТАВЬ_СЮДА_СВОЙ_WEBHOOK_URL";
+    // ============================================
+
+    // Mock data (will be replaced by bot later)
+    const SERVER = {
+      founded: "2026-01-15",
+      foundedDisplay: "15 января 2026",
+      totalMessages: 18420,
+      totalVoiceHours: 3127,
+      totalMembers: 87,
+      totalLinks: 1240,
+      onlineNow: 23
+    };
+
+    const MEMBERS = [
+      { name: "АрбузМастер", role: "Админ", messages: 2140, voice: 312, avatar: "А" },
+      { name: "WildMelon", role: "Модератор", messages: 1580, voice: 245, avatar: "W" },
+      { name: "КивиБой", role: "Участник", messages: 890, voice: 98, avatar: "К" },
+      { name: "НочнойВолк", role: "Участник", messages: 720, voice: 156, avatar: "Н" },
+      { name: "PixelQueen", role: "Участник", messages: 1105, voice: 67, avatar: "P" },
+      { name: "Сэм", role: "Модератор", messages: 1340, voice: 189, avatar: "С" },
+      { name: "LunaFox", role: "Участник", messages: 450, voice: 42, avatar: "L" },
+      { name: "ДыняХан", role: "Участник", messages: 980, voice: 210, avatar: "Д" },
+      { name: "Shadow", role: "Участник", messages: 320, voice: 28, avatar: "S" },
+      { name: "Мята", role: "Участник", messages: 670, voice: 115, avatar: "М" },
+      { name: "GrokFan", role: "Участник", messages: 540, voice: 73, avatar: "G" },
+      { name: "Тихий", role: "Участник", messages: 210, voice: 19, avatar: "Т" },
+      { name: "ВасяПупкин", role: "Участник", messages: 1500, voice: 280, avatar: "В" },
+      { name: "NeonBlade", role: "Участник", messages: 880, voice: 134, avatar: "N" },
+      { name: "Сова", role: "Участник", messages: 390, voice: 55, avatar: "С" }
+    ];
+
+    // ========== LOADER ANIMATION ==========
+    function runLoader() {
+      const loader = document.getElementById('loader');
+      const wm = document.getElementById('watermelon');
+      const wrap = document.getElementById('wmWrap');
+
+      // Phase 1: appear
+      setTimeout(() => {
+        wm.classList.add('glow');
+        // Colorize
+        wm.querySelector('.rind').setAttribute('fill', '#2d8f3c');
+        wm.querySelector('.flesh').setAttribute('fill', '#e63946');
+        wm.querySelectorAll('ellipse').forEach(e => e.setAttribute('fill', '#1a1a1a'));
+      }, 600);
+
+      // Phase 2: explode
+      setTimeout(() => {
+        wm.classList.add('explode');
+        createExplosion(wrap);
+      }, 1800);
+
+      // Phase 3: hide loader, show app
+      setTimeout(() => {
+        loader.classList.add('hidden');
+        document.getElementById('app').classList.add('visible');
+        createBackgroundStars();
+        initApp();
+      }, 2800);
+    }
+
+    function createExplosion(container) {
+      const colors = ['#fff', '#e63946', '#2d8f3c', '#f1faee', '#a8dadc'];
+      for (let i = 0; i < 48; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const angle = (Math.PI * 2 * i) / 48;
+        const dist = 80 + Math.random() * 140;
+        const tx = Math.cos(angle) * dist;
+        const ty = Math.sin(angle) * dist;
+        const size = 2 + Math.random() * 4;
+        p.style.width = p.style.height = size + 'px';
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        p.style.left = '50%';
+        p.style.top = '50%';
+        p.style.marginLeft = '-2px';
+        p.style.marginTop = '-2px';
+        p.style.opacity = '1';
+        p.style.transition = `transform ${0.7 + Math.random() * 0.5}s cubic-bezier(0.1,0.8,0.3,1), opacity 0.7s ease`;
+        container.appendChild(p);
+
+        requestAnimationFrame(() => {
+          p.style.transform = `translate(${tx}px, ${ty}px) scale(0)`;
+          p.style.opacity = '0';
+        });
+      }
+    }
+
+    function createBackgroundStars() {
+      const container = document.getElementById('stars');
+      for (let i = 0; i < 60; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        s.style.left = Math.random() * 100 + '%';
+        s.style.top = Math.random() * 100 + '%';
+        const size = 1 + Math.random() * 2.5;
+        s.style.width = s.style.height = size + 'px';
+        s.style.animationDuration = (2 + Math.random() * 4) + 's';
+        s.style.animationDelay = (Math.random() * 3) + 's';
+        container.appendChild(s);
+      }
+    }
+
+    // ========== APP INIT ==========
+    function initApp() {
+      // Login check
+      const saved = localStorage.getItem('da_user');
+      if (!saved) {
+        document.getElementById('loginModal').classList.add('show');
+      } else {
+        setUser(saved);
+      }
+
+      // Tabs
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+          tab.classList.add('active');
+          document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+        });
+      });
+
+      // Login
+      document.getElementById('loginBtn').addEventListener('click', doLogin);
+      document.getElementById('loginNick').addEventListener('keydown', e => {
+        if (e.key === 'Enter') doLogin();
+      });
+
+      // User chip click → re-login
+      document.getElementById('userChip').addEventListener('click', () => {
+        document.getElementById('loginModal').classList.add('show');
+        document.getElementById('loginNick').value = localStorage.getItem('da_user') || '';
+      });
+
+      // Render stats
+      renderStats();
+      renderMembers(MEMBERS);
+
+      // Search
+      document.getElementById('searchInput').addEventListener('input', e => {
+        const q = e.target.value.trim().toLowerCase();
+        const filtered = q
+          ? MEMBERS.filter(m => m.name.toLowerCase().includes(q))
+          : MEMBERS;
+        renderMembers(filtered);
+      });
+
+      // Report form
+      document.getElementById('reportForm').addEventListener('submit', submitReport);
+    }
+
+    function doLogin() {
+      const nick = document.getElementById('loginNick').value.trim();
+      if (!nick || nick.length < 2) {
+        alert('Введите ник (минимум 2 символа)');
+        return;
+      }
+      localStorage.setItem('da_user', nick);
+      setUser(nick);
+      document.getElementById('loginModal').classList.remove('show');
+    }
+
+    function setUser(name) {
+      document.getElementById('userName').textContent = name;
+      document.getElementById('userAvatar').textContent = name[0].toUpperCase();
+    }
+
+    function renderStats() {
+      const grid = document.getElementById('statsGrid');
+      const cards = [
+        { label: 'Дата основания', value: SERVER.foundedDisplay, sub: 'сервер' },
+        { label: 'Участников', value: SERVER.totalMembers, sub: 'на сервере' },
+        { label: 'Сообщений', value: SERVER.totalMessages.toLocaleString('ru'), sub: 'всего' },
+        { label: 'Голосовые часы', value: SERVER.totalVoiceHours.toLocaleString('ru'), sub: 'суммарно' },
+        { label: 'Ссылок', value: SERVER.totalLinks.toLocaleString('ru'), sub: 'отправлено' },
+        { label: 'Онлайн сейчас', value: SERVER.onlineNow, sub: 'участников' }
+      ];
+
+      grid.innerHTML = cards.map(c => `
+        <div class="stat-card">
+          <div class="stat-label">${c.label}</div>
+          <div class="stat-value">${c.value}</div>
+          <div class="stat-sub">${c.sub}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderMembers(list) {
+      const tbody = document.getElementById('membersBody');
+      document.getElementById('membersCount').textContent = list.length + ' участников';
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4"><div class="empty-state">Никого не найдено</div></td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(m => `
+        <tr>
+          <td>
+            <div class="member-cell">
+              <div class="avatar">${m.avatar}</div>
+              <div>
+                <div class="member-name">${m.name}</div>
+              </div>
+            </div>
+          </td>
+          <td>${m.messages.toLocaleString('ru')}</td>
+          <td>${m.voice} ч</td>
+          <td><span class="badge">${m.role}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    async function submitReport(e) {
+      e.preventDefault();
+      const statusEl = document.getElementById('status');
+      const btn = document.getElementById('submitBtn');
+
+      if (!WEBHOOK_URL || WEBHOOK_URL.includes('ВСТАВЬ_СЮДА')) {
+        showStatus('error', 'Webhook не настроен. Вставьте URL в код.');
+        return;
+      }
+
+      const playerNick = document.getElementById('playerNick').value.trim();
+      const reason = document.getElementById('reason').value;
+      const description = document.getElementById('description').value.trim();
+      const evidence = document.getElementById('evidence').value.trim();
+      const reporter = localStorage.getItem('da_user') || 'Аноним';
+
+      btn.disabled = true;
+      btn.textContent = 'Отправка...';
+
+      const embed = {
+        title: '🚨 Новая жалоба',
+        color: 0x111111,
+        fields: [
+          { name: 'На игрока', value: playerNick, inline: true },
+          { name: 'Причина', value: reason, inline: true },
+          { name: 'От', value: reporter, inline: true },
+          { name: 'Описание', value: description.slice(0, 1020) }
+        ],
+        footer: { text: 'Дикие арбузы · Форма жалоб' },
+        timestamp: new Date().toISOString()
+      };
+
+      if (evidence) {
+        embed.fields.push({ name: 'Доказательства', value: evidence.slice(0, 1020) });
+      }
+
+      try {
+        const res = await fetch(WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: 'Жалобы · Дикие арбузы',
+            embeds: [embed]
+          })
+        });
+
+        if (res.ok) {
+          showStatus('success', 'Жалоба отправлена! Администрация скоро рассмотрит.');
+          document.getElementById('reportForm').reset();
+        } else {
+          throw new Error(res.status);
+        }
+      } catch (err) {
+        showStatus('error', 'Не удалось отправить. Попробуйте позже.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Отправить жалобу';
+      }
+    }
+
+    function showStatus(type, msg) {
+      const el = document.getElementById('status');
+      el.className = 'status ' + type;
+      el.textContent = msg;
+    }
+
+    // Start
+    runLoader();
+  </script>
+</body>
+</html>
