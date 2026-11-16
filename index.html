@@ -722,6 +722,116 @@
       .tab { padding: 12px 14px; font-size: 0.88rem; }
       th, td { padding: 10px 12px; }
     }
+        /* ========== CUSTOM DROPDOWNS ========== */
+    .custom-select-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    .custom-select-trigger {
+      width: 100%;
+      background: #000;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 38px 12px 16px;
+      color: #fff;
+      font-size: 0.95rem;
+      cursor: pointer;
+      user-select: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-height: 46px;
+    }
+
+    .custom-select-trigger.placeholder {
+      color: #555;
+    }
+
+    .custom-select-trigger::after {
+      content: '';
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      width: 8px;
+      height: 8px;
+      border-right: 1.8px solid #888;
+      border-bottom: 1.8px solid #888;
+      transform: translateY(-65%) rotate(45deg);
+      transition: transform 0.25s ease, border-color 0.2s;
+      pointer-events: none;
+    }
+
+    .custom-select-wrap.open .custom-select-trigger {
+      border-color: #fff;
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.12);
+    }
+
+    .custom-select-wrap.open .custom-select-trigger::after {
+      transform: translateY(-25%) rotate(-135deg);
+      border-color: #fff;
+    }
+
+    .custom-dropdown {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      right: 0;
+      background: rgba(12, 12, 12, 0.96);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 12px;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.85), 0 0 25px rgba(255, 255, 255, 0.06);
+      max-height: 230px;
+      overflow-y: auto;
+      z-index: 250;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px);
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+    }
+
+    .custom-select-wrap.open .custom-dropdown {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .custom-option {
+      padding: 11px 16px;
+      font-size: 0.92rem;
+      color: #d4d4d4;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.15s, color 0.15s;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .custom-option:last-child {
+      border-bottom: none;
+    }
+
+    .custom-option:hover,
+    .custom-option.selected {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .custom-option-role {
+      font-size: 0.72rem;
+      color: var(--muted);
+      padding: 2px 8px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+    }
+
+    .custom-dropdown::-webkit-scrollbar { width: 6px; }
+    .custom-dropdown::-webkit-scrollbar-track { background: transparent; }
+    .custom-dropdown::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+
   </style>
 </head>
 <body>
@@ -843,14 +953,17 @@
             <form id="reportForm">
               <div class="form-group">
                 <label for="playerNick">Ник игрока <span class="required">*</span></label>
-                <input type="text" id="playerNick" placeholder="Например: Player#1234" required maxlength="64" />
-              </div>
+               <div class="form-group">
+  <label for="playerNick">Ник игрока <span class="required">*</span></label>
+  <input type="text" id="playerNick" list="serverPlayersList" placeholder="Начни вводить или выбери игрока..." required maxlength="64" autocomplete="off" />
+  <datalist id="serverPlayersList"></datalist>
+</div>
+
 
               <div class="form-group">
                 <label for="reason">Причина <span class="required">*</span></label>
                 <select id="reason" required>
                   <option value="" disabled selected>Выберите причину</option>
-                  <option value="Читы / макросы">Читы / макросы</option>
                   <option value="Оскорбления / токсичность">Оскорбления / токсичность</option>
                   <option value="Спам / реклама">Спам / реклама</option>
                   <option value="Нарушение правил сервера">Нарушение правил сервера</option>
@@ -1047,15 +1160,13 @@
 
       document.getElementById('loginBtn').addEventListener('click', startDiscordLogin);
 
-      // Клик по профилю в шапке — выход из аккаунта
+            // Клик по профилю в шапке — срабатывает только для неавторизованного гостя
       document.getElementById('userChip').addEventListener('click', () => {
-        sessionStorage.removeItem('da_discord_token');
-        currentUser = null;
-        document.getElementById('userName').textContent = 'Гость';
-        document.getElementById('userAvatar').textContent = '?';
+        if (currentUser) return;
         document.getElementById('authError').textContent = '';
         document.getElementById('loginModal').classList.add('show');
       });
+
 
       renderStats();
       renderMembers(MEMBERS);
@@ -1064,6 +1175,70 @@
         const q = e.target.value.trim().toLowerCase();
         const filtered = q ? MEMBERS.filter(m => m.name.toLowerCase().includes(q)) : MEMBERS;
         renderMembers(filtered);
+      });
+      // ========== КАСТОМНЫЕ ВЫПАДАЮЩИЕ СПИСКИ РЕПОРТА ==========
+      const playerWrap = document.getElementById('playerDropdownWrap');
+      const playerInput = document.getElementById('playerNick');
+      const playerList = document.getElementById('playerDropdown');
+
+      function renderPlayerOptions(filter = '') {
+        const q = filter.trim().toLowerCase();
+        const matches = MEMBERS.filter(m => m.name.toLowerCase().includes(q));
+        if (!matches.length) {
+          playerList.innerHTML = '<div class="custom-option" style="color:#666;cursor:default;">Игрок не найден — можно ввести свой ник</div>';
+          return;
+        }
+        playerList.innerHTML = matches.map(m =>
+          `<div class="custom-option" data-nick="${m.name}">
+            <span>${m.name}</span>
+            <span class="custom-option-role">${m.role}</span>
+          </div>`
+        ).join('');
+      }
+
+      playerInput.addEventListener('focus', () => {
+        renderPlayerOptions(playerInput.value);
+        playerWrap.classList.add('open');
+      });
+
+      playerInput.addEventListener('input', () => {
+        renderPlayerOptions(playerInput.value);
+        playerWrap.classList.add('open');
+      });
+
+      playerList.addEventListener('click', (e) => {
+        const opt = e.target.closest('.custom-option[data-nick]');
+        if (!opt) return;
+        playerInput.value = opt.dataset.nick;
+        playerWrap.classList.remove('open');
+      });
+
+      // Кастомный выбор причины
+      const reasonWrap = document.getElementById('reasonDropdownWrap');
+      const reasonTrigger = document.getElementById('reasonTrigger');
+      const reasonInput = document.getElementById('reason');
+      const reasonDropdown = document.getElementById('reasonDropdown');
+
+      reasonTrigger.addEventListener('click', () => {
+        reasonWrap.classList.toggle('open');
+      });
+
+      reasonDropdown.addEventListener('click', (e) => {
+        const opt = e.target.closest('.custom-option');
+        if (!opt) return;
+        const val = opt.dataset.value;
+        reasonInput.value = val;
+        reasonTrigger.textContent = val;
+        reasonTrigger.classList.remove('placeholder');
+        reasonDropdown.querySelectorAll('.custom-option').forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+        reasonWrap.classList.remove('open');
+      });
+
+      // Закрытие списков при клике мимо
+      document.addEventListener('click', (e) => {
+        if (!playerWrap.contains(e.target)) playerWrap.classList.remove('open');
+        if (!reasonWrap.contains(e.target)) reasonWrap.classList.remove('open');
       });
 
       document.getElementById('reportForm').addEventListener('submit', submitReport);
