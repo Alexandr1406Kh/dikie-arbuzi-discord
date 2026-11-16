@@ -831,6 +831,32 @@
     .custom-dropdown::-webkit-scrollbar { width: 6px; }
     .custom-dropdown::-webkit-scrollbar-track { background: transparent; }
     .custom-dropdown::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+    /* Блокировка всего интерфейса до успешного входа */
+    body:not(.authenticated) #app {
+      display: none !important;
+    }
+
+    body:not(.authenticated) #loginModal {
+      display: flex !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+    /* Полный список игроков без ограничения высоты */
+    #playerDropdown {
+      max-height: none;
+      overflow-y: visible;
+    }
+
+    /* Оранжевая обводка совпавших при поиске букв */
+    .nick-match {
+      border: 1px solid #f97316;
+      background: rgba(249, 115, 22, 0.14);
+      color: #fff;
+      border-radius: 4px;
+      padding: 0 3px;
+      margin: 0 1px;
+      box-shadow: 0 0 8px rgba(249, 115, 22, 0.35);
+    }
 
   </style>
 </head>
@@ -953,25 +979,26 @@
             <form id="reportForm">
               <div class="form-group">
                 <label for="playerNick">Ник игрока <span class="required">*</span></label>
-               <div class="form-group">
-  <label for="playerNick">Ник игрока <span class="required">*</span></label>
-  <input type="text" id="playerNick" list="serverPlayersList" placeholder="Начни вводить или выбери игрока..." required maxlength="64" autocomplete="off" />
-  <datalist id="serverPlayersList"></datalist>
-</div>
-
-
-              <div class="form-group">
-                <label for="reason">Причина <span class="required">*</span></label>
-                <select id="reason" required>
-                  <option value="" disabled selected>Выберите причину</option>
-                  <option value="Оскорбления / токсичность">Оскорбления / токсичность</option>
-                  <option value="Спам / реклама">Спам / реклама</option>
-                  <option value="Нарушение правил сервера">Нарушение правил сервера</option>
-                  <option value="Мошенничество">Мошенничество</option>
-                  <option value="Другое">Другое</option>
-                </select>
+                <div class="custom-select-wrap" id="playerDropdownWrap">
+                  <input type="text" id="playerNick" placeholder="Выбери или введи ник игрока..." required maxlength="64" autocomplete="off" />
+                  <div class="custom-dropdown" id="playerDropdown"></div>
+                </div>
               </div>
 
+              <div class="form-group">
+                <label>Причина <span class="required">*</span></label>
+                <div class="custom-select-wrap" id="reasonDropdownWrap">
+                  <input type="hidden" id="reason" required />
+                  <div class="custom-select-trigger placeholder" id="reasonTrigger">Выберите причину</div>
+                  <div class="custom-dropdown" id="reasonDropdown">
+                    <div class="custom-option" data-value="Оскорбления / токсичность">Оскорбления / токсичность</div>
+                    <div class="custom-option" data-value="Спам / реклама">Спам / реклама</div>
+                    <div class="custom-option" data-value="Нарушение правил сервера">Нарушение правил сервера</div>
+                    <div class="custom-option" data-value="Мошенничество">Мошенничество</div>
+                    <div class="custom-option" data-value="Другое">Другое</div>
+                  </div>
+                </div>
+              </div>
               <div class="form-group">
                 <label for="description">Описание <span class="required">*</span></label>
                 <textarea id="description" placeholder="Подробно опишите, что произошло..." required maxlength="1500"></textarea>
@@ -1181,20 +1208,34 @@
       const playerInput = document.getElementById('playerNick');
       const playerList = document.getElementById('playerDropdown');
 
+           function escapeRegExp(str) {
+        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      }
+
       function renderPlayerOptions(filter = '') {
-        const q = filter.trim().toLowerCase();
-        const matches = MEMBERS.filter(m => m.name.toLowerCase().includes(q));
+        const q = filter.trim();
+        const lowerQ = q.toLowerCase();
+        const matches = MEMBERS.filter(m => m.name.toLowerCase().includes(lowerQ));
+
         if (!matches.length) {
           playerList.innerHTML = '<div class="custom-option" style="color:#666;cursor:default;">Игрок не найден — можно ввести свой ник</div>';
           return;
         }
-        playerList.innerHTML = matches.map(m =>
-          `<div class="custom-option" data-nick="${m.name}">
-            <span>${m.name}</span>
+
+        const regex = q ? new RegExp(`(${escapeRegExp(q)})`, 'gi') : null;
+
+        playerList.innerHTML = matches.map(m => {
+          const highlightedName = regex
+            ? m.name.replace(regex, '<span class="nick-match">$1</span>')
+            : m.name;
+
+          return `<div class="custom-option" data-nick="${m.name}">
+            <span>${highlightedName}</span>
             <span class="custom-option-role">${m.role}</span>
-          </div>`
-        ).join('');
+          </div>`;
+        }).join('');
       }
+
 
       playerInput.addEventListener('focus', () => {
         renderPlayerOptions(playerInput.value);
@@ -1316,8 +1357,10 @@
       }
     }
 
-       function setUser(name, userId, avatarHash) {
+           function setUser(name, userId, avatarHash) {
+      document.body.classList.add('authenticated');
       document.getElementById('userName').textContent = name;
+      // ... остальной код функции setUser без изменений
       const avatarEl = document.getElementById('userAvatar');
       if (userId && avatarHash) {
         const ext = avatarHash.startsWith('a_') ? '.gif' : '.png';
@@ -1377,8 +1420,14 @@
       `).join('');
     }
 
-    async function submitReport(e) {
+       async function submitReport(e) {
       e.preventDefault();
+      if (!document.getElementById('reason').value) {
+        alert('Пожалуйста, выберите причину жалобы из списка!');
+        return;
+      }
+      // ... остальной код функции submitReport
+
       const statusEl = document.getElementById('status');
       const btn = document.getElementById('submitBtn');
 
