@@ -1914,25 +1914,26 @@
           clearTimeout(melodyTimer);
         }
       });
-
-
       // Проверяем, вернулся ли пользователь после авторизации в Discord
-      const hashParams = new URLSearchParams(window.location.hash.slice(1));
-      let accessToken = hashParams.get('access_token');
+      (async () => {
+        const hashParams = new URLSearchParams(window.location.hash.slice(1));
+        let accessToken = hashParams.get('access_token');
 
-      if (accessToken) {
-        sessionStorage.setItem('da_discord_token', accessToken);
-        // Очищаем токен из адресной строки для безопасности
-        history.replaceState(null, '', window.location.pathname + window.location.search);
-      } else {
-        accessToken = sessionStorage.getItem('da_discord_token');
-      }
+        if (accessToken) {
+          sessionStorage.setItem('da_discord_token', accessToken);
+          history.replaceState(null, '', window.location.pathname + window.location.search);
+        } else {
+          accessToken = sessionStorage.getItem('da_discord_token');
+        }
 
-      if (accessToken) {
-        await verifyDiscordMember(accessToken);
-      } else {
-        document.getElementById('loginModal').classList.add('show');
-      }
+        if (accessToken) {
+          await verifyDiscordMember(accessToken);
+        } else {
+          document.getElementById('loginModal').classList.add('show');
+        }
+      })();
+    }
+
     }
 
         function startDiscordLogin() {
