@@ -1087,10 +1087,14 @@
       }
     }
 
-    function startDiscordLogin() {
-      const authUrl = `https://discord.com{DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify%20guilds`;
-      window.location.href = authUrl;
+        function startDiscordLogin() {
+      const base = 'https://discord.com' + '/api/oauth2/authorize';
+      const query = '?client_id=' + DISCORD_CLIENT_ID +
+        '&redirect_uri=' + encodeURIComponent(REDIRECT_URI) +
+        '&response_type=token&scope=identify%20guilds';
+      window.location.href = base + query;
     }
+
 
     async function verifyDiscordMember(token) {
       const modal = document.getElementById('loginModal');
