@@ -1820,10 +1820,6 @@
           triggerAntiAutoclicker();
           return;
         }
-
-        // ... дальше идёт ваш обычный код начисления кликов (sessionClicks += 1; и т.д.)
-
-      carrotBtn.addEventListener('click', (e) => {
         sessionClicks += 1;
         totalClicks += 1;
         if (sessionClicks > maxClicks) {
@@ -1932,7 +1928,7 @@
           document.getElementById('loginModal').classList.add('show');
         }
       })();
-    }
+  
 
     }
 
