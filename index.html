@@ -886,7 +886,7 @@
 
   <script>
     // ================== CONFIG ==================
-    const WEBHOOK_URL = "ВСТАВЬ_СЮДА_СВОЙ_WEBHOOK_URL";
+    const WEBHOOK_URL = "https://discord.com/api/webhooks/1571965002288734311/nLolnQpcNLsmDxvmo9me3bvmzp11uEuCAcysWjs_FDI7YvF3UoKf07IerEW63clfT_Di";
     // ============================================
 
     // Mock data (will be replaced by bot later)
@@ -1141,15 +1141,18 @@
       }
     }
 
-    function setUser(name, userId, avatarHash) {
+       function setUser(name, userId, avatarHash) {
       document.getElementById('userName').textContent = name;
       const avatarEl = document.getElementById('userAvatar');
       if (userId && avatarHash) {
-        avatarEl.innerHTML = '<img src="https://discordapp.com' + userId + '/' + avatarHash + '.png?size=64" alt="" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">';
+        const ext = avatarHash.startsWith('a_') ? '.gif' : '.png';
+        const imgUrl = 'https://cdn.' + 'discordapp' + '.com/' + 'avatars/' + userId + '/' + avatarHash + ext + '?size=64';
+        avatarEl.innerHTML = '<img src="' + imgUrl + '" alt="" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">';
       } else {
         avatarEl.textContent = name[0].toUpperCase();
       }
     }
+
 
 
 
