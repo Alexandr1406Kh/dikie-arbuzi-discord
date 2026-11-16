@@ -760,19 +760,13 @@
   <div id="loginModal">
     <div class="modal-card">
       <div class="auth-mark" aria-hidden="true">✦</div>
-      <h2 id="authTitle">Вход на сервер</h2>
-      <p id="authDescription">Введи свой ник и пароль. При первом использовании ник будет зарегистрирован автоматически.</p>
-      <div class="form-group">
-        <label for="loginNick">Ник</label>
-        <input type="text" id="loginNick" placeholder="Твой ник" maxlength="32" autocomplete="username" />
-      </div>
-      <div class="form-group">
-        <label for="loginPassword">Пароль</label>
-        <input type="password" id="loginPassword" placeholder="Не менее 8 символов" maxlength="128" autocomplete="current-password" />
-      </div>
+           <h2 id="authTitle">Вход на сервер</h2>
+      <p id="authDescription">Авторизуйся через Discord. Мы автоматически проверим, состоишь ли ты на нашем сервере.</p>
       <div class="auth-error" id="authError" role="alert"></div>
-      <button class="btn" id="loginBtn">Продолжить</button>
-      <div class="auth-footnote">Пароль проверяется сервером. Не отправляй его никому.</div>
+      <button class="btn" id="loginBtn" style="display:flex;align-items:center;justify-content:center;gap:10px;background:#5865F2;color:#fff;border:none;">
+        Войти через Discord
+      </button>
+      <div class="auth-footnote">Доступ открыт только участникам сервера «Дикие арбузы».</div>
     </div>
   </div>
 
@@ -1033,16 +1027,15 @@
     })();
 
     // ========== APP INIT ==========
-    function initApp() {
-      // Пароль спрашивается при каждом открытии сайта; сохраняем только ник.
-      const saved = localStorage.getItem('da_user') || '';
-      document.getElementById('loginNick').value = saved;
-      document.getElementById('loginModal').classList.add('show');
-      document.getElementById('loginPassword').addEventListener('keydown', e => {
-        if (e.key === 'Enter') doLogin();
-      });
+       // ========== DISCORD OAUTH2 CONFIG ==========
+    const DISCORD_CLIENT_ID = '1571925563931885671';
+    const TARGET_GUILD_ID = '1529397921445842964';
+    const REDIRECT_URI = window.location.origin + window.location.pathname;
+    let currentUser = null;
 
-      // Tabs
+    // ========== APP INIT ==========
+    async function initApp() {
+      // Настройка вкладок и интерфейса
       document.querySelectorAll('.tab').forEach(tab => {
         tab.addEventListener('click', () => {
           document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -1052,72 +1045,106 @@
         });
       });
 
-      // Login
-      document.getElementById('loginBtn').addEventListener('click', doLogin);
-      document.getElementById('loginNick').addEventListener('keydown', e => {
-        if (e.key === 'Enter') doLogin();
-      });
+      document.getElementById('loginBtn').addEventListener('click', startDiscordLogin);
 
-      // User chip click → re-login
+      // Клик по профилю в шапке — выход из аккаунта
       document.getElementById('userChip').addEventListener('click', () => {
-        document.getElementById('loginModal').classList.add('show');
-        document.getElementById('loginNick').value = localStorage.getItem('da_user') || '';
-        document.getElementById('loginPassword').value = '';
+        sessionStorage.removeItem('da_discord_token');
+        currentUser = null;
+        document.getElementById('userName').textContent = 'Гость';
+        document.getElementById('userAvatar').textContent = '?';
         document.getElementById('authError').textContent = '';
+        document.getElementById('loginModal').classList.add('show');
       });
 
-      // Render stats
       renderStats();
       renderMembers(MEMBERS);
 
-      // Search
       document.getElementById('searchInput').addEventListener('input', e => {
         const q = e.target.value.trim().toLowerCase();
-        const filtered = q
-          ? MEMBERS.filter(m => m.name.toLowerCase().includes(q))
-          : MEMBERS;
+        const filtered = q ? MEMBERS.filter(m => m.name.toLowerCase().includes(q)) : MEMBERS;
         renderMembers(filtered);
       });
 
-      // Report form
       document.getElementById('reportForm').addEventListener('submit', submitReport);
-    }
 
-    // URL публичного API: после размещения бота укажи адрес своего сервера.
-    const API_URL = 'https://lingering-union-87ff.alexandrhristuk.workers.dev/';
-    let currentUser = null;
+      // Проверяем, вернулся ли пользователь после авторизации в Discord
+      const hashParams = new URLSearchParams(window.location.hash.slice(1));
+      let accessToken = hashParams.get('access_token');
 
-    async function doLogin() {
-      const nick = document.getElementById('loginNick').value.trim();
-      const password = document.getElementById('loginPassword').value;
-      const btn = document.getElementById('loginBtn');
-      const error = document.getElementById('authError');
-      error.textContent = '';
-      if (nick.length < 2) { error.textContent = 'Ник должен содержать минимум 2 символа.'; return; }
-      if (password.length < 8) { error.textContent = 'Пароль должен содержать минимум 8 символов.'; return; }
-      if (API_URL.includes('YOUR-BOT-SERVER')) { error.textContent = 'Сервер авторизации ещё не настроен. Администратору нужно указать API_URL.'; return; }
-      btn.disabled = true;
-      btn.textContent = 'Проверяем…';
-      try {
-        const response = await fetch(`${API_URL.replace(/\/$/, '')}/api/auth/enter`, {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ nick, password })
-        });
-        const result = await response.json().catch(() => ({}));
-        if (!response.ok) throw new Error(result.error || 'Не удалось выполнить вход.');
-        currentUser = result.nick || nick;
-        localStorage.setItem('da_user', currentUser);
-        setUser(currentUser);
-        document.getElementById('loginPassword').value = '';
-        document.getElementById('loginModal').classList.remove('show');
-      } catch (err) {
-        error.textContent = err.message === 'Failed to fetch'
-          ? 'Нет связи с сервером. Проверь адрес API и доступность бота.' : err.message;
-      } finally {
-        btn.disabled = false;
-        btn.textContent = 'Продолжить';
+      if (accessToken) {
+        sessionStorage.setItem('da_discord_token', accessToken);
+        // Очищаем токен из адресной строки для безопасности
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+      } else {
+        accessToken = sessionStorage.getItem('da_discord_token');
+      }
+
+      if (accessToken) {
+        await verifyDiscordMember(accessToken);
+      } else {
+        document.getElementById('loginModal').classList.add('show');
       }
     }
+
+    function startDiscordLogin() {
+      const authUrl = `https://discord.com{DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify%20guilds`;
+      window.location.href = authUrl;
+    }
+
+    async function verifyDiscordMember(token) {
+      const modal = document.getElementById('loginModal');
+      const btn = document.getElementById('loginBtn');
+      const error = document.getElementById('authError');
+
+      modal.classList.add('show');
+      btn.disabled = true;
+      btn.textContent = 'Проверяем участие на сервере…';
+      error.textContent = '';
+
+      try {
+        // 1. Получаем профиль пользователя Discord
+        const userRes = await fetch('https://discord.com', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (!userRes.ok) throw new Error('Сессия устарела. Войди заново.');
+        const user = await userRes.json();
+
+        // 2. Получаем список серверов пользователя и ищем наш сервер
+        const guildsRes = await fetch('https://discord.com/guilds', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (!guildsRes.ok) throw new Error('Не удалось проверить список серверов.');
+        const guilds = await guildsRes.json();
+
+        const isMember = guilds.some(g => g.id === TARGET_GUILD_ID);
+        if (!isMember) {
+          sessionStorage.removeItem('da_discord_token');
+          throw new Error('Доступ запрещён: тебя нет на Discord-сервере «Дикие арбузы»!');
+        }
+
+        // 3. Пользователь на сервере — пускаем на сайт!
+        currentUser = user.global_name || user.username;
+        setUser(currentUser, user.id, user.avatar);
+        modal.classList.remove('show');
+      } catch (err) {
+        error.textContent = err.message;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Войти через Discord';
+      }
+    }
+
+    function setUser(name, userId, avatarHash) {
+      document.getElementById('userName').textContent = name;
+      const avatarEl = document.getElementById('userAvatar');
+      if (userId && avatarHash) {
+        avatarEl.innerHTML = `<img src="https://discordapp.com{userId}/${avatarHash}.png?size=64" alt="" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+      } else {
+        avatarEl.textContent = name[0].toUpperCase();
+      }
+    }
+
 
     function setUser(name) {
       document.getElementById('userName').textContent = name;
