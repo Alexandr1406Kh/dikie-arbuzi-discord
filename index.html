@@ -1096,7 +1096,7 @@
     }
 
 
-    async function verifyDiscordMember(token) {
+ async function verifyDiscordMember(token) {
       const modal = document.getElementById('loginModal');
       const btn = document.getElementById('loginBtn');
       const error = document.getElementById('authError');
@@ -1106,17 +1106,19 @@
       btn.textContent = 'Проверяем участие на сервере…';
       error.textContent = '';
 
+      const discordApi = 'https://discord.com' + '/api/v10';
+
       try {
         // 1. Получаем профиль пользователя Discord
-        const userRes = await fetch('https://discord.com', {
-          headers: { Authorization: `Bearer ${token}` }
+        const userRes = await fetch(discordApi + '/users/@me', {
+          headers: { Authorization: 'Bearer ' + token }
         });
         if (!userRes.ok) throw new Error('Сессия устарела. Войди заново.');
         const user = await userRes.json();
 
         // 2. Получаем список серверов пользователя и ищем наш сервер
-        const guildsRes = await fetch('https://discord.com/guilds', {
-          headers: { Authorization: `Bearer ${token}` }
+        const guildsRes = await fetch(discordApi + '/users/@me/guilds', {
+          headers: { Authorization: 'Bearer ' + token }
         });
         if (!guildsRes.ok) throw new Error('Не удалось проверить список серверов.');
         const guilds = await guildsRes.json();
