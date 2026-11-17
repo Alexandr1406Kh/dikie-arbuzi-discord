@@ -1635,8 +1635,25 @@
       });
 
 
+           // Загружаем живую статистику из data.json (обновляется ботом)
+      let liveMembers = MEMBERS;
+      try {
+        const statsRes = await fetch('./data.json?t=' + Date.now());
+        if (statsRes.ok) {
+          const liveData = await statsRes.json();
+          if (liveData.server) Object.assign(SERVER, liveData.server);
+          if (Array.isArray(liveData.members) && liveData.members.length) {
+            liveMembers = liveData.members;
+            MEMBERS.splice(0, MEMBERS.length, ...liveData.members);
+          }
+        }
+      } catch (e) {
+        console.warn('Используются локальные данные статистики:', e);
+      }
+
       renderStats();
-      renderMembers(MEMBERS);
+      renderMembers(liveMembers);
+
 
       document.getElementById('searchInput').addEventListener('input', e => {
         const q = e.target.value.trim().toLowerCase();
