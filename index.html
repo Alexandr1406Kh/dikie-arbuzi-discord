@@ -2068,7 +2068,7 @@
       `).join('');
     }
 
-        function renderMembers(list) {
+     function renderMembers(list) {
       const tbody = document.getElementById('membersBody');
       document.getElementById('membersCount').textContent = `${list.length} участников`;
 
@@ -2076,6 +2076,13 @@
         tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:32px;">Никого не найдено</td></tr>';
         return;
       }
+
+      // Сначала те, кто онлайн, затем по количеству сообщений
+      const sortedList = [...list].sort((a, b) => {
+        const onlineDiff = (b.online ? 1 : 0) - (a.online ? 1 : 0);
+        if (onlineDiff !== 0) return onlineDiff;
+        return (b.messages || 0) - (a.messages || 0);
+      });
 
       tbody.innerHTML = list.map(m => {
         const avatarHtml = m.avatarUrl
