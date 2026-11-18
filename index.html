@@ -83,9 +83,41 @@
       animation: fadeIn 0.6s 0.3s forwards;
     }
 
-     @keyframes panelIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+        @keyframes sidePanelIn {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .clicker-side-panel {
+      position: fixed;
+      top: 135px;
+      width: 240px;
+      background: rgba(12, 12, 12, 0.88);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: var(--glow);
+      z-index: 20;
+      min-height: 460px;
+      max-height: calc(100vh - 170px);
+      overflow-y: auto;
+      animation: sidePanelIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .clicker-side-panel.left {
+      left: 20px;
+    }
+
+    .clicker-side-panel.right {
+      right: 20px;
+      animation-delay: 0.1s;
     }
 
 
