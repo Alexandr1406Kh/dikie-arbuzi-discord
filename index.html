@@ -863,7 +863,9 @@
       flex-direction: column;
       align-items: center;
       gap: 20px;
+      width: 100%;
     }
+
 
     .clicker-stats-row {
       display: grid;
@@ -1911,7 +1913,7 @@
       document.getElementById('reportForm').addEventListener('submit', submitReport);
             // ========== ЗИМНИЙ КЛИКЕР ==========
             // ========== ОБЩИЕ ЛИДЕРБОРДЫ СЕРВЕРА ==========
-      const FIREBASE_DB_URL = 'https://arbuzniy-zabiaka-default-rtdb.europe-west1.firebasedatabase.app/';
+            const FIREBASE_DB_URL = 'https://' + 'arbuzniy-zabiaka-default-rtdb.europe-west1' + '.firebasedatabase.app';
       let syncLeaderboardTimer = null;
 
       function renderLeaderboards(playersObj) {
@@ -2007,6 +2009,7 @@
       const stageEl = document.getElementById('clickerStage');
 
       function updateClickerUI() {
+        scheduleLeaderboardSync();
         sessionEl.textContent = sessionClicks.toLocaleString('ru');
         totalEl.textContent = totalClicks.toLocaleString('ru');
         maxEl.textContent = maxClicks.toLocaleString('ru');
@@ -2248,27 +2251,29 @@
         btn.textContent = 'Войти через Discord';
       }
     }
-  let currentUserId = null;
+    let currentUserId = null;
     let currentUserAvatar = '';
 
     function setUser(name, userId, avatarHash) {
       currentUserId = userId;
       document.body.classList.add('authenticated');
       document.getElementById('userName').textContent = name;
-      // ... внутри блока if (userId && avatarHash) сохраните imgUrl в currentUserAvatar:
-      // currentUserAvatar = imgUrl;
+      const chip = document.getElementById('userChip');
+      if (chip) {
+        chip.style.cursor = 'default';
+        chip.style.pointerEvents = 'none';
+        chip.removeAttribute('title');
+      }
       const avatarEl = document.getElementById('userAvatar');
       if (userId && avatarHash) {
         const ext = avatarHash.startsWith('a_') ? '.gif' : '.png';
         const imgUrl = 'https://cdn.' + 'discordapp' + '.com/' + 'avatars/' + userId + '/' + avatarHash + ext + '?size=64';
+        currentUserAvatar = imgUrl;
         avatarEl.innerHTML = '<img src="' + imgUrl + '" alt="" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">';
       } else {
-        avatarEl.textContent = name[0].toUpperCase();
+        avatarEl.textContent = name.toUpperCase();
       }
     }
-
-
-
 
     function renderStats() {
       const grid = document.getElementById('statsGrid');
