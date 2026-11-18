@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-18T19:51:59.950Z",
+  "updatedAt": "2026-11-18T19:59:54.640Z",
   "server": {
     "foundedDisplay": "15 января 2026",
     "totalMembers": 26,
@@ -11,185 +11,263 @@
   "members": [
     {
       "name": "жирный уебан",
-      "role": "Участник",
+      "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟐",
+      "roleColor": "#4d4dd3",
       "messages": 0,
       "voice": 0,
-      "avatar": "Ж"
+      "avatar": "Ж",
+      "avatarUrl": "https://cdn.discordapp.com/avatars/1530272711597625561/f9511b1b766dc6ccb7cec96cf4fe4d91.png?size=64",
+      "online": true
     },
     {
       "name": "НЕ матвей",
-      "role": "Участник",
+      "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟏",
+      "roleColor": "#a84300",
       "messages": 0,
       "voice": 0,
-      "avatar": "Н"
+      "avatar": "Н",
+      "avatarUrl": "https://cdn.discordapp.com/avatars/1520870158300872956/1f58968f1b6096153cdec0dc1fb5b9a6.png?size=64",
+      "online": true
     },
     {
       "name": "Max0N4kk",
-      "role": "Модератор",
+      "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟒",
+      "roleColor": "#053a9f",
       "messages": 0,
       "voice": 0,
-      "avatar": "M"
+      "avatar": "M",
+      "avatarUrl": "https://cdn.discordapp.com/avatars/1399149928789577968/bcc08189decbbf515b800b18d5dd9149.png?size=64",
+      "online": true
     },
     {
       "name": "вторник ✿",
-      "role": "Участник",
+      "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟐",
+      "roleColor": "#4d4dd3",
       "messages": 0,
       "voice": 0,
-      "avatar": "В"
+      "avatar": "В",
+      "avatarUrl": "https://cdn.discordapp.com/avatars/1372996495858733077/a72b0f179ed52a4bf4783d5ed461f6db.png?size=64",
+      "online": true
     },
     {
       "name": "neokir26",
-      "role": "Модератор",
+      "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟒",
+      "roleColor": "#053a9f",
       "messages": 0,
       "voice": 0,
-      "avatar": "N"
+      "avatar": "N",
+      "avatarUrl": "https://cdn.discordapp.com/avatars/973488344988258314/ffece783102bc21942e11e4e768ec5b0.png?size=64",
+      "online": true
     },
     {
       "name": "milediana",
-      "role": "Участник",
+      "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟐",
+      "roleColor": "#4d4dd3",
       "messages": 0,
       "voice": 0,
-      "avatar": "M"
+      "avatar": "M",
+      "avatarUrl": "https://cdn.discordapp.com/avatars/430827331351871519/8230909996810db43fd4bd8fea2ce04a.png?size=64",
+      "online": false
     },
     {
       "name": "Гоша",
-      "role": "Участник",
+      "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟏",
+      "roleColor": "#a84300",
       "messages": 0,
       "voice": 0,
-      "avatar": "Г"
+      "avatar": "Г",
+      "avatarUrl": "https://cdn.discordapp.com/avatars/545106004501856286/f849a29198491f5148109a7502519bab.png?size=64",
+      "online": false
     },
     {
       "name": "PARADIMETILOMINOBENZALDEGIT",
-      "role": "Участник",
+      "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟏",
+      "roleColor": "#a84300",
       "messages": 0,
       "voice": 0,
-      "avatar": "P"
+      "avatar": "P",
+      "avatarUrl": "https://cdn.discordapp.com/avatars/590583206177407016/ff9ba54c22e84a802c7662c3bd296347.png?size=64",
+      "online": false
     },
     {
       "name": "Zxc_Arbuzik",
-      "role": "Участник",
+      "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟏",
+      "roleColor": "#a84300",
       "messages": 0,
       "voice": 0,
-      "avatar": "Z"
+      "avatar": "Z",
+      "avatarUrl": "https://cdn.discordapp.com/avatars/931535678347558913/d029f0fa1201485aab1bd1e2ec7482ff.png?size=64",
+      "online": false
     },
     {
       "name": "Ser1os",
-      "role": "Участник",
+      "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟏",
+      "roleColor": "#a84300",
       "messages": 0,
       "voice": 0,
-      "avatar": "S"
+      "avatar": "S",
+      "avatarUrl": "https://cdn.discordapp.com/avatars/1002113623096832110/9a721a600c4df23b9168cd53cf041207.png?size=64",
+      "online": false
     },
     {
       "name": "𝟐𝟎 𝐅𝐏𝐒 𝐌𝐎𝐍𝐒𝐓𝐑",
-      "role": "Админ",
+      "role": "SuperAdm",
+      "roleColor": "#f1c40f",
       "messages": 0,
       "voice": 0,
-      "avatar": "\ud835"
+      "avatar": "\ud835",
+      "avatarUrl": "https://cdn.discordapp.com/avatars/1025489286549737522/aadf68292d62dc0ec2121655b3159a74.png?size=64",
+      "online": false
     },
     {
       "name": "! moonlit",
-      "role": "Модератор",
+      "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟒",
+      "roleColor": "#053a9f",
       "messages": 0,
       "voice": 0,
-      "avatar": "!"
+      "avatar": "!",
+      "avatarUrl": "https://cdn.discordapp.com/avatars/1118616937237332099/bb23f0fe43d7ca36c55d30119c735ddb.png?size=64",
+      "online": true
     },
     {
       "name": "Сёма",
-      "role": "Админ",
+      "role": "SuperAdm",
+      "roleColor": "#f1c40f",
       "messages": 0,
       "voice": 0,
-      "avatar": "С"
+      "avatar": "С",
+      "avatarUrl": "https://cdn.discordapp.com/avatars/1140620558447423578/5f66119e76a0e6d1c10ae78896004dab.png?size=64",
+      "online": false
     },
     {
       "name": "⸸_𝔛𝔭𝔬𝔴𝔢𝔯_⸸",
-      "role": "Участник",
+      "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟏",
+      "roleColor": "#a84300",
       "messages": 0,
       "voice": 0,
-      "avatar": "⸸"
+      "avatar": "⸸",
+      "avatarUrl": "https://cdn.discordapp.com/avatars/1176186921572126810/6be9cc8212a1229d4ce21e89b7bb0554.png?size=64",
+      "online": false
     },
     {
       "name": "Barracuda",
-      "role": "Участник",
+      "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟐",
+      "roleColor": "#4d4dd3",
       "messages": 0,
       "voice": 0,
-      "avatar": "B"
+      "avatar": "B",
+      "avatarUrl": "https://cdn.discordapp.com/avatars/1271118879485071394/36e921e1a1fbe164db71dadae99a7bf3.png?size=64",
+      "online": false
     },
     {
       "name": "жадный ублюдок",
-      "role": "Участник",
+      "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟐",
+      "roleColor": "#4d4dd3",
       "messages": 0,
       "voice": 0,
-      "avatar": "Ж"
+      "avatar": "Ж",
+      "avatarUrl": "https://cdn.discordapp.com/avatars/1341844769822867549/fe7b1e55dda851cb71c1ec2f7e253cfb.png?size=64",
+      "online": false
     },
     {
       "name": "Свин толстяк",
-      "role": "Участник",
+      "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟐",
+      "roleColor": "#4d4dd3",
       "messages": 0,
       "voice": 0,
-      "avatar": "С"
+      "avatar": "С",
+      "avatarUrl": "https://cdn.discordapp.com/avatars/1346967336795504671/d36b5140e08abd70a8b0e259bfbd95d6.png?size=64",
+      "online": true
     },
     {
       "name": "Макс",
-      "role": "Участник",
+      "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟏",
+      "roleColor": "#a84300",
       "messages": 0,
       "voice": 0,
-      "avatar": "М"
+      "avatar": "М",
+      "avatarUrl": "https://cdn.discordapp.com/avatars/1410670158208569505/c6d8e6a1e8c15ae5566ad91e0629c7b9.png?size=64",
+      "online": false
     },
     {
       "name": "Даня 666",
-      "role": "Участник",
+      "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟏",
+      "roleColor": "#a84300",
       "messages": 0,
       "voice": 0,
-      "avatar": "Д"
+      "avatar": "Д",
+      "avatarUrl": "https://cdn.discordapp.com/avatars/1422662178992816159/75f333e8d57b5769ba84bbdaa641aa27.png?size=64",
+      "online": true
     },
     {
       "name": "Тимурик",
-      "role": "Участник",
+      "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟏",
+      "roleColor": "#a84300",
       "messages": 0,
       "voice": 0,
-      "avatar": "Т"
+      "avatar": "Т",
+      "avatarUrl": "https://cdn.discordapp.com/avatars/1452656469148434523/27f1246e61b9f9cc2e2ab1c89e304b5f.png?size=64",
+      "online": false
     },
     {
       "name": "затем",
-      "role": "Участник",
+      "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟐",
+      "roleColor": "#4d4dd3",
       "messages": 0,
       "voice": 0,
-      "avatar": "З"
+      "avatar": "З",
+      "avatarUrl": "https://cdn.discordapp.com/avatars/1465048448998047745/b9a3f4aae979b6c2eff06c9ca8460ee4.png?size=64",
+      "online": false
     },
     {
       "name": "Пискарь",
-      "role": "Админ",
+      "role": "SuperAdm",
+      "roleColor": "#f1c40f",
       "messages": 0,
       "voice": 0,
-      "avatar": "П"
+      "avatar": "П",
+      "avatarUrl": "https://cdn.discordapp.com/avatars/1511730101832781922/0362ff3f1e65ee4d471942762fad49bc.png?size=64",
+      "online": true
     },
     {
       "name": "артем",
-      "role": "Участник",
+      "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟏",
+      "roleColor": "#a84300",
       "messages": 0,
       "voice": 0,
-      "avatar": "А"
+      "avatar": "А",
+      "avatarUrl": "https://cdn.discordapp.com/avatars/1520854611530092614/8bf8ffc2c21bced41e9b6adeac9554df.png?size=64",
+      "online": false
     },
     {
       "name": "artemiks249",
-      "role": "Участник",
+      "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟏",
+      "roleColor": "#a84300",
       "messages": 0,
       "voice": 0,
-      "avatar": "A"
+      "avatar": "A",
+      "avatarUrl": "https://cdn.discordapp.com/avatars/1523690410814210192/ee60105c6c91226a54d5fdb93b928ec4.png?size=64",
+      "online": false
     },
     {
       "name": "Thomas Thomas",
-      "role": "Участник",
+      "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟏",
+      "roleColor": "#a84300",
       "messages": 0,
       "voice": 0,
-      "avatar": "T"
+      "avatar": "T",
+      "avatarUrl": "https://cdn.discordapp.com/embed/avatars/3.png",
+      "online": false
     },
     {
       "name": "xjdwvlzurlpgjslpvya",
-      "role": "Участник",
+      "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟏",
+      "roleColor": "#a84300",
       "messages": 0,
       "voice": 0,
-      "avatar": "X"
+      "avatar": "X",
+      "avatarUrl": "https://cdn.discordapp.com/embed/avatars/4.png",
+      "online": false
     }
   ]
 }
