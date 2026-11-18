@@ -1642,10 +1642,11 @@
         if (statsRes.ok) {
           const liveData = await statsRes.json();
           if (liveData.server) Object.assign(SERVER, liveData.server);
-          if (Array.isArray(liveData.members) && liveData.members.length) {
+         if (Array.isArray(liveData.members)) {
             liveMembers = liveData.members;
             MEMBERS.splice(0, MEMBERS.length, ...liveData.members);
           }
+
         }
       } catch (e) {
         console.warn('Используются локальные данные статистики:', e);
