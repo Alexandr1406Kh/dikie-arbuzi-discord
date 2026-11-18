@@ -1,12 +1,195 @@
 {
-  "updatedAt": "2026-11-18T19:48:14.064Z",
+  "updatedAt": "2026-11-18T19:51:59.950Z",
   "server": {
     "foundedDisplay": "15 января 2026",
-    "totalMembers": 0,
+    "totalMembers": 26,
     "totalMessages": 0,
     "totalVoiceHours": 0,
     "totalLinks": 0,
     "onlineNow": 9
   },
-  "members": []
+  "members": [
+    {
+      "name": "жирный уебан",
+      "role": "Участник",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "Ж"
+    },
+    {
+      "name": "НЕ матвей",
+      "role": "Участник",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "Н"
+    },
+    {
+      "name": "Max0N4kk",
+      "role": "Модератор",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "M"
+    },
+    {
+      "name": "вторник ✿",
+      "role": "Участник",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "В"
+    },
+    {
+      "name": "neokir26",
+      "role": "Модератор",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "N"
+    },
+    {
+      "name": "milediana",
+      "role": "Участник",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "M"
+    },
+    {
+      "name": "Гоша",
+      "role": "Участник",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "Г"
+    },
+    {
+      "name": "PARADIMETILOMINOBENZALDEGIT",
+      "role": "Участник",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "P"
+    },
+    {
+      "name": "Zxc_Arbuzik",
+      "role": "Участник",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "Z"
+    },
+    {
+      "name": "Ser1os",
+      "role": "Участник",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "S"
+    },
+    {
+      "name": "𝟐𝟎 𝐅𝐏𝐒 𝐌𝐎𝐍𝐒𝐓𝐑",
+      "role": "Админ",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "\ud835"
+    },
+    {
+      "name": "! moonlit",
+      "role": "Модератор",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "!"
+    },
+    {
+      "name": "Сёма",
+      "role": "Админ",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "С"
+    },
+    {
+      "name": "⸸_𝔛𝔭𝔬𝔴𝔢𝔯_⸸",
+      "role": "Участник",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "⸸"
+    },
+    {
+      "name": "Barracuda",
+      "role": "Участник",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "B"
+    },
+    {
+      "name": "жадный ублюдок",
+      "role": "Участник",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "Ж"
+    },
+    {
+      "name": "Свин толстяк",
+      "role": "Участник",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "С"
+    },
+    {
+      "name": "Макс",
+      "role": "Участник",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "М"
+    },
+    {
+      "name": "Даня 666",
+      "role": "Участник",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "Д"
+    },
+    {
+      "name": "Тимурик",
+      "role": "Участник",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "Т"
+    },
+    {
+      "name": "затем",
+      "role": "Участник",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "З"
+    },
+    {
+      "name": "Пискарь",
+      "role": "Админ",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "П"
+    },
+    {
+      "name": "артем",
+      "role": "Участник",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "А"
+    },
+    {
+      "name": "artemiks249",
+      "role": "Участник",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "A"
+    },
+    {
+      "name": "Thomas Thomas",
+      "role": "Участник",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "T"
+    },
+    {
+      "name": "xjdwvlzurlpgjslpvya",
+      "role": "Участник",
+      "messages": 0,
+      "voice": 0,
+      "avatar": "X"
+    }
+  ]
 }
