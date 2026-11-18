@@ -1182,6 +1182,33 @@
       margin-top: 8px;
       font-weight: 600;
     }
+    /* Индикатор онлайн/офлайн на аватарке */
+    .member-avatar-wrap {
+      position: relative;
+      width: 34px;
+      height: 34px;
+      flex-shrink: 0;
+    }
+
+    .status-dot {
+      position: absolute;
+      bottom: -1px;
+      right: -1px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 2px solid #0a0a0a;
+    }
+
+    .status-dot.online {
+      background: #22c55e;
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
+    }
+
+    .status-dot.offline {
+      background: #ef4444;
+      box-shadow: 0 0 6px rgba(239, 68, 68, 0.5);
+    }
 
   </style>
 </head>
@@ -2041,30 +2068,44 @@
       `).join('');
     }
 
-    function renderMembers(list) {
+        function renderMembers(list) {
       const tbody = document.getElementById('membersBody');
-      document.getElementById('membersCount').textContent = list.length + ' участников';
+      document.getElementById('membersCount').textContent = `${list.length} участников`;
 
-      if (list.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4"><div class="empty-state">Никого не найдено</div></td></tr>`;
+      if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:32px;">Никого не найдено</td></tr>';
         return;
       }
 
-      tbody.innerHTML = list.map(m => `
-        <tr>
-          <td>
-            <div class="member-cell">
-              <div class="avatar">${m.avatar}</div>
-              <div>
-                <div class="member-name">${m.name}</div>
+      tbody.innerHTML = list.map(m => {
+        const avatarHtml = m.avatarUrl
+          ? `<img src="${m.avatarUrl}" alt="" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" onerror="this.remove();">`
+          : (m.avatar || m.name.toUpperCase());
+
+        const roleStyle = m.roleColor
+          ? `style="border-color:${m.roleColor};color:${m.roleColor};background:${m.roleColor}18;"`
+          : '';
+
+        const statusClass = m.online ? 'online' : 'offline';
+        const statusTitle = m.online ? 'В сети' : 'Не в сети';
+
+        return `
+          <tr>
+            <td>
+              <div class="member-cell">
+                <div class="member-avatar-wrap" title="${statusTitle}">
+                  <div class="member-avatar" style="overflow:hidden;width:100%;height:100%;">${avatarHtml}</div>
+                  <span class="status-dot ${statusClass}"></span>
+                </div>
+                <span>${m.name}</span>
               </div>
-            </div>
-          </td>
-          <td>${m.messages.toLocaleString('ru')}</td>
-          <td>${m.voice} ч</td>
-          <td><span class="badge">${m.role}</span></td>
-        </tr>
-      `).join('');
+            </td>
+            <td>${m.messages.toLocaleString('ru')}</td>
+            <td>${m.voice} ч</td>
+            <td><span class="role-badge" ${roleStyle}>${m.role}</span></td>
+          </tr>
+        `;
+      }).join('');
     }
 
        async function submitReport(e) {
