@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-11-19T17:15:06.783Z",
+  "updatedAt": "2026-11-19T17:22:44.983Z",
   "server": {
     "foundedDisplay": "июль 2026",
     "totalMembers": 26,
-    "totalMessages": 5207,
+    "totalMessages": 5208,
     "totalVoiceHours": 0,
     "totalLinks": 521,
-    "onlineNow": 12
+    "onlineNow": 13
   },
   "members": [
     {
@@ -47,11 +47,11 @@
       "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟒",
       "roleColor": "#053a9f",
       "rolePosition": 9,
-      "messages": 504,
+      "messages": 505,
       "voice": 0,
       "avatar": "! MOONLIT",
       "avatarUrl": "https://cdn.discordapp.com/avatars/1118616937237332099/bb23f0fe43d7ca36c55d30119c735ddb.png?size=64",
-      "online": false
+      "online": true
     },
     {
       "name": "Пискарь",
