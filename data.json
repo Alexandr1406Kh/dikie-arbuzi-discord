@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-11-19T10:34:57.618Z",
+  "updatedAt": "2026-11-19T17:15:06.783Z",
   "server": {
     "foundedDisplay": "июль 2026",
     "totalMembers": 26,
-    "totalMessages": 5205,
+    "totalMessages": 5207,
     "totalVoiceHours": 0,
     "totalLinks": 521,
-    "onlineNow": 3
+    "onlineNow": 12
   },
   "members": [
     {
@@ -14,7 +14,7 @@
       "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟒",
       "roleColor": "#053a9f",
       "rolePosition": 9,
-      "messages": 1712,
+      "messages": 1713,
       "voice": 0,
       "avatar": "NEOKIR26",
       "avatarUrl": "https://cdn.discordapp.com/avatars/973488344988258314/ffece783102bc21942e11e4e768ec5b0.png?size=64",
@@ -29,7 +29,7 @@
       "voice": 0,
       "avatar": "MAX0N4KK",
       "avatarUrl": "https://cdn.discordapp.com/avatars/1399149928789577968/bcc08189decbbf515b800b18d5dd9149.png?size=64",
-      "online": false
+      "online": true
     },
     {
       "name": "вторник ✿",
@@ -58,7 +58,7 @@
       "role": "SuperAdm",
       "roleColor": "#f1c40f",
       "rolePosition": 13,
-      "messages": 383,
+      "messages": 384,
       "voice": 0,
       "avatar": "ПИСКАРЬ",
       "avatarUrl": "https://cdn.discordapp.com/avatars/1511730101832781922/0362ff3f1e65ee4d471942762fad49bc.png?size=64",
@@ -84,7 +84,7 @@
       "voice": 0,
       "avatar": "𝟐𝟎 𝐅𝐏𝐒 𝐌𝐎𝐍𝐒𝐓𝐑",
       "avatarUrl": "https://cdn.discordapp.com/avatars/1025489286549737522/aadf68292d62dc0ec2121655b3159a74.png?size=64",
-      "online": false
+      "online": true
     },
     {
       "name": "затем",
@@ -106,18 +106,18 @@
       "voice": 0,
       "avatar": "ЖИРНЫЙ УЕБАН",
       "avatarUrl": "https://cdn.discordapp.com/avatars/1530272711597625561/f9511b1b766dc6ccb7cec96cf4fe4d91.png?size=64",
-      "online": false
+      "online": true
     },
     {
-      "name": "жадный ублюдок",
+      "name": "Кошкомальчик",
       "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟐",
       "roleColor": "#4d4dd3",
       "rolePosition": 8,
       "messages": 26,
       "voice": 0,
-      "avatar": "ЖАДНЫЙ УБЛЮДОК",
+      "avatar": "КОШКОМАЛЬЧИК",
       "avatarUrl": "https://cdn.discordapp.com/avatars/1341844769822867549/fe7b1e55dda851cb71c1ec2f7e253cfb.png?size=64",
-      "online": false
+      "online": true
     },
     {
       "name": "Zxc_Arbuzik",
@@ -128,7 +128,7 @@
       "voice": 0,
       "avatar": "ZXC_ARBUZIK",
       "avatarUrl": "https://cdn.discordapp.com/avatars/931535678347558913/d029f0fa1201485aab1bd1e2ec7482ff.png?size=64",
-      "online": false
+      "online": true
     },
     {
       "name": "PARADIMETILOMINOBENZALDEGIT",
@@ -150,7 +150,18 @@
       "voice": 0,
       "avatar": "НЕ МАТВЕЙ",
       "avatarUrl": "https://cdn.discordapp.com/avatars/1520870158300872956/1f58968f1b6096153cdec0dc1fb5b9a6.png?size=64",
-      "online": false
+      "online": true
+    },
+    {
+      "name": "артем",
+      "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟏",
+      "roleColor": "#a84300",
+      "rolePosition": 7,
+      "messages": 2,
+      "voice": 0,
+      "avatar": "АРТЕМ",
+      "avatarUrl": "https://cdn.discordapp.com/avatars/1520854611530092614/0c5f6aa98d6a2237ea733c4848b5b12a.png?size=64",
+      "online": true
     },
     {
       "name": "Barracuda",
@@ -172,18 +183,7 @@
       "voice": 0,
       "avatar": "СВИН ТОЛСТЯК",
       "avatarUrl": "https://cdn.discordapp.com/avatars/1346967336795504671/d36b5140e08abd70a8b0e259bfbd95d6.png?size=64",
-      "online": false
-    },
-    {
-      "name": "артем",
-      "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟏",
-      "roleColor": "#a84300",
-      "rolePosition": 7,
-      "messages": 2,
-      "voice": 0,
-      "avatar": "АРТЕМ",
-      "avatarUrl": "https://cdn.discordapp.com/avatars/1520854611530092614/8bf8ffc2c21bced41e9b6adeac9554df.png?size=64",
-      "online": false
+      "online": true
     },
     {
       "name": "milediana",
@@ -249,7 +249,7 @@
       "voice": 0,
       "avatar": "ДАНЯ 666",
       "avatarUrl": "https://cdn.discordapp.com/avatars/1422662178992816159/75f333e8d57b5769ba84bbdaa641aa27.png?size=64",
-      "online": false
+      "online": true
     },
     {
       "name": "Тимурик",
