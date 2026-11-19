@@ -2351,7 +2351,7 @@
       `).join('');
     }
 
-     function renderMembers(list) {
+         function renderMembers(list) {
       const tbody = document.getElementById('membersBody');
       document.getElementById('membersCount').textContent = `${list.length} участников`;
 
@@ -2360,14 +2360,14 @@
         return;
       }
 
-      // Сначала те, кто онлайн, затем по количеству сообщений
       const sortedList = [...list].sort((a, b) => {
-        const onlineDiff = (b.online ? 1 : 0) - (a.online ? 1 : 0);
-        if (onlineDiff !== 0) return onlineDiff;
+        const aOn = a.online === true ? 1 : 0;
+        const bOn = b.online === true ? 1 : 0;
+        if (bOn !== aOn) return bOn - aOn;
         return (b.messages || 0) - (a.messages || 0);
       });
 
-      tbody.innerHTML = list.map(m => {
+      tbody.innerHTML = sortedList.map(m => {
         const avatarHtml = m.avatarUrl
           ? `<img src="${m.avatarUrl}" alt="" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" onerror="this.remove();">`
           : (m.avatar || m.name.toUpperCase());
