@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-11-19T05:07:36.164Z",
+  "updatedAt": "2026-11-19T10:34:57.618Z",
   "server": {
     "foundedDisplay": "июль 2026",
     "totalMembers": 26,
-    "totalMessages": 5201,
+    "totalMessages": 5205,
     "totalVoiceHours": 0,
-    "totalLinks": 520,
-    "onlineNow": 2
+    "totalLinks": 521,
+    "onlineNow": 3
   },
   "members": [
     {
@@ -18,7 +18,7 @@
       "voice": 0,
       "avatar": "NEOKIR26",
       "avatarUrl": "https://cdn.discordapp.com/avatars/973488344988258314/ffece783102bc21942e11e4e768ec5b0.png?size=64",
-      "online": false
+      "online": true
     },
     {
       "name": "Max0N4kk",
@@ -36,11 +36,11 @@
       "role": "🪪𝐂𝐚𝐫𝐝 𝐋𝐯𝐥-𝟐",
       "roleColor": "#4d4dd3",
       "rolePosition": 8,
-      "messages": 862,
+      "messages": 863,
       "voice": 0,
       "avatar": "ВТОРНИК ✿",
       "avatarUrl": "https://cdn.discordapp.com/avatars/1372996495858733077/a72b0f179ed52a4bf4783d5ed461f6db.png?size=64",
-      "online": false
+      "online": true
     },
     {
       "name": "! moonlit",
@@ -51,14 +51,14 @@
       "voice": 0,
       "avatar": "! MOONLIT",
       "avatarUrl": "https://cdn.discordapp.com/avatars/1118616937237332099/bb23f0fe43d7ca36c55d30119c735ddb.png?size=64",
-      "online": true
+      "online": false
     },
     {
       "name": "Пискарь",
       "role": "SuperAdm",
       "roleColor": "#f1c40f",
       "rolePosition": 13,
-      "messages": 380,
+      "messages": 383,
       "voice": 0,
       "avatar": "ПИСКАРЬ",
       "avatarUrl": "https://cdn.discordapp.com/avatars/1511730101832781922/0362ff3f1e65ee4d471942762fad49bc.png?size=64",
