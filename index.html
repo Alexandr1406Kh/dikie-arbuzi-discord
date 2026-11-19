@@ -1913,23 +1913,25 @@
       } catch (e) {}
 
 
-      document.getElementById('searchInput').addEventListener('input', e => {
-          document.querySelectorAll('th.sortable').forEach(th => {
+           document.querySelectorAll('th.sortable').forEach(th => {
         th.addEventListener('click', () => {
           const key = th.dataset.sort;
           if (tableSort.key === key) {
             if (tableSort.dir === 'desc') tableSort.dir = 'asc';
-            else tableSort.key = null; // 3-й клик возвращает сортировку по онлайну и ролям
+            else tableSort.key = null; // 3-й клик сбрасывает сортировку
           } else {
             tableSort = { key, dir: 'desc' };
           }
+
           document.querySelectorAll('th.sortable').forEach(el => el.classList.remove('asc', 'desc'));
           if (tableSort.key) th.classList.add(tableSort.dir);
 
           const q = document.getElementById('searchInput').value.trim().toLowerCase();
-          renderMembers(MEMBERS.filter(m => m.name.toLowerCase().includes(q)));
+          const sourceList = (typeof liveMembers !== 'undefined' && liveMembers.length) ? liveMembers : MEMBERS;
+          renderMembers(sourceList.filter(m => m.name.toLowerCase().includes(q)));
         });
       });
+
 
         const q = e.target.value.trim().toLowerCase();
         const filtered = q ? MEMBERS.filter(m => m.name.toLowerCase().includes(q)) : MEMBERS;
