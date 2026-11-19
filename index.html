@@ -1366,6 +1366,31 @@
       animation: none !important;
       transform: none !important;
     }
+    /* Кликабельные заголовки таблицы для сортировки */
+    th.sortable {
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.2s;
+    }
+
+    th.sortable:hover {
+      color: #fff;
+    }
+
+    .sort-arrows {
+      display: inline-flex;
+      flex-direction: column;
+      vertical-align: middle;
+      margin-left: 6px;
+      font-size: 0.55rem;
+      line-height: 0.65;
+      color: #555;
+    }
+
+    th.sortable.asc .sort-arrows .up,
+    th.sortable.desc .sort-arrows .down {
+      color: #fff;
+    }
 
   </style>
 </head>
@@ -1465,13 +1490,20 @@
           <div class="table-wrap">
             <table>
               <thead>
-                <tr>
-                  <th>Участник</th>
-                  <th>Сообщений</th>
-                  <th>Голосовые часы</th>
-                  <th>Роль</th>
-                </tr>
-              </thead>
+                    <tr>
+                      <th>Участник</th>
+                      <th class="sortable" data-sort="messages">
+                        Сообщений
+                        <span class="sort-arrows"><span class="up">▲</span><span class="down">▼</span></span>
+                      </th>
+                      <th class="sortable" data-sort="voice">
+                        Голосовые часы
+                        <span class="sort-arrows"><span class="up">▲</span><span class="down">▼</span></span>
+                      </th>
+                      <th>Роль</th>
+                    </tr>
+                  </thead>
+
               <tbody id="membersBody">
               </tbody>
             </table>
@@ -1882,6 +1914,23 @@
 
 
       document.getElementById('searchInput').addEventListener('input', e => {
+          document.querySelectorAll('th.sortable').forEach(th => {
+        th.addEventListener('click', () => {
+          const key = th.dataset.sort;
+          if (tableSort.key === key) {
+            if (tableSort.dir === 'desc') tableSort.dir = 'asc';
+            else tableSort.key = null; // 3-й клик возвращает сортировку по онлайну и ролям
+          } else {
+            tableSort = { key, dir: 'desc' };
+          }
+          document.querySelectorAll('th.sortable').forEach(el => el.classList.remove('asc', 'desc'));
+          if (tableSort.key) th.classList.add(tableSort.dir);
+
+          const q = document.getElementById('searchInput').value.trim().toLowerCase();
+          renderMembers(MEMBERS.filter(m => m.name.toLowerCase().includes(q)));
+        });
+      });
+
         const q = e.target.value.trim().toLowerCase();
         const filtered = q ? MEMBERS.filter(m => m.name.toLowerCase().includes(q)) : MEMBERS;
         renderMembers(filtered);
@@ -2351,7 +2400,9 @@
       `).join('');
     }
 
-         function renderMembers(list) {
+    let tableSort = { key: null, dir: 'desc' };
+
+    function renderMembers(list) {
       const tbody = document.getElementById('membersBody');
       document.getElementById('membersCount').textContent = `${list.length} участников`;
 
@@ -2360,7 +2411,16 @@
         return;
       }
 
-           const sortedList = [...list].sort((a, b) => {
+      const sortedList = [...list].sort((a, b) => {
+        // Если пользователь нажал на заголовок столбца («Сообщений» или «Голосовые часы»)
+        if (tableSort.key) {
+          const valA = a[tableSort.key] || 0;
+          const valB = b[tableSort.key] || 0;
+          if (valA !== valB) {
+            return tableSort.dir === 'asc' ? valA - valB : valB - valA;
+          }
+        }
+
         // 1. Сначала игроки в сети (зелёный кружочек)
         const aOn = a.online === true ? 1 : 0;
         const bOn = b.online === true ? 1 : 0;
@@ -2405,6 +2465,7 @@
         `;
       }).join('');
     }
+
 
        async function submitReport(e) {
       e.preventDefault();
