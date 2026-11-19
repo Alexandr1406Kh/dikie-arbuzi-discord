@@ -1391,6 +1391,235 @@
     th.sortable.desc .sort-arrows .down {
       color: #fff;
     }
+    /* Тумблер анонимной отправки жалобы */
+    .anon-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 18px;
+      cursor: pointer;
+      user-select: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .anon-toggle-row:hover {
+      border-color: rgba(255, 255, 255, 0.35);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .anon-toggle-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .anon-toggle-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .anon-toggle-sub {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .switch-box {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .switch-box input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .switch-slider {
+      position: absolute;
+      inset: 0;
+      background: #222;
+      border: 1px solid #444;
+      border-radius: 999px;
+      transition: 0.25s;
+    }
+
+    .switch-slider::before {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      left: 2px;
+      top: 2px;
+      background: #888;
+      border-radius: 50%;
+      transition: 0.25s;
+    }
+
+    .switch-box input:checked + .switch-slider {
+      background: #f97316;
+      border-color: #fb923c;
+    }
+
+    .switch-box input:checked + .switch-slider::before {
+      transform: translateX(20px);
+      background: #fff;
+    }
+    /* ========== ЛИЧНЫЙ ПРОФИЛЬ И МОИ ЖАЛОБЫ ========== */
+    .profile-hero {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    }
+
+    .profile-big-avatar {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.25);
+      background: #151515;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      font-weight: 700;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .profile-name-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .profile-name {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .profile-id {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-family: monospace;
+    }
+
+    .profile-reports-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .profile-reports-btn:hover {
+      border-color: rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .profile-reports-btn .arrow-icon {
+      transition: transform 0.25s ease;
+      color: var(--muted);
+    }
+
+    .profile-reports-btn.open .arrow-icon {
+      transform: rotate(180deg);
+    }
+
+    .my-reports-drawer {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .my-reports-drawer.open {
+      display: flex;
+    }
+
+    .my-report-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .my-report-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .verdict-badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .verdict-badge.pending {
+      background: rgba(250, 204, 21, 0.12);
+      color: #facc15;
+      border: 1px solid rgba(250, 204, 21, 0.35);
+    }
+
+    .verdict-badge.approved {
+      background: rgba(34, 197, 94, 0.15);
+      color: #4ade80;
+      border: 1px solid rgba(34, 197, 94, 0.4);
+    }
+
+    .verdict-badge.rejected {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+    }
 
   </style>
 </head>
@@ -1466,6 +1695,7 @@
     </header>
 
        <nav class="tabs">
+      <button class="tab" data-tab="profile">Профиль</button>
       <button class="tab active" data-tab="stats">Статистика</button>
       <button class="tab" data-tab="report">Репорт</button>
       <button class="tab" data-tab="clicker">Кликер ❄</button>
@@ -1551,7 +1781,16 @@
                 <label for="evidence">Доказательства (ссылки)</label>
                 <textarea id="evidence" placeholder="Ссылки на скрины, видео, сообщения..." maxlength="1000"></textarea>
               </div>
-
+            <label class="anon-toggle-row" for="anonReportCheck">
+              <div class="anon-toggle-info">
+                <span class="anon-toggle-title">🕵️ Отправить анонимно</span>
+                <span class="anon-toggle-sub">Ваш ник и тег Discord не будут показаны администрации</span>
+              </div>
+              <span class="switch-box">
+                <input type="checkbox" id="anonReportCheck" />
+                <span class="switch-slider"></span>
+              </span>
+            </label>
               <button type="submit" class="btn" id="submitBtn">Отправить жалобу</button>
             </form>
 
@@ -1690,8 +1929,52 @@
           </aside>
         </div>
       </section>
+      <!-- PROFILE PANEL -->
+      <section class="panel" id="panel-profile">
+        <div class="profile-hero">
+          <div class="profile-big-avatar" id="profAvatar">?</div>
+          <div class="profile-info">
+            <div class="profile-name-row">
+              <span class="profile-name" id="profName">Игрок</span>
+              <span class="role-badge" id="profRole">Участник</span>
+              <span class="verdict-badge pending" id="profStatusBadge" style="border-color:rgba(74,222,128,0.4);color:#4ade80;background:rgba(74,222,128,0.12);">В сети</span>
+            </div>
+            <div class="profile-id" id="profDiscordId">Discord ID: —</div>
+          </div>
+        </div>
 
+        <div class="stats-grid" style="margin-bottom:22px;">
+          <div class="stat-card">
+            <div class="stat-label">Отправлено сообщений</div>
+            <div class="stat-value" id="profMessages">0</div>
+            <div class="stat-sub">на сервере</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Голосовые часы</div>
+            <div class="stat-value" id="profVoice">0 ч</div>
+            <div class="stat-sub">в войсах</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Всего кликов</div>
+            <div class="stat-value" id="profClicks">0</div>
+            <div class="stat-sub">в зимнем кликере</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Рекорд за сессию</div>
+            <div class="stat-value" id="profMaxClicks">0</div>
+            <div class="stat-sub">лучший заход</div>
+          </div>
+        </div>
 
+        <button type="button" class="profile-reports-btn" id="toggleMyReportsBtn">
+          <span>📋 Мои жалобы (<span id="myReportsCount">0</span>)</span>
+          <span class="arrow-icon">▼</span>
+        </button>
+
+        <div class="my-reports-drawer" id="myReportsDrawer">
+          <div style="color:var(--muted);font-size:0.88rem;padding:12px;">Вы ещё не отправляли жалоб</div>
+        </div>
+      </section>
     </main>
 
     <footer>
@@ -1911,6 +2194,118 @@
           }
         }
       } catch (e) {}
+      // ========== ПРОФИЛЬ И МОИ ЖАЛОБЫ ==========
+      function getSavedReports() {
+        if (!currentUserId) return [];
+        try {
+          return JSON.parse(localStorage.getItem('arbuz_my_reports_' + currentUserId) || '[]');
+        } catch (e) {
+          return [];
+        }
+      }
+      async function renderMyReports() {
+        const countEl = document.getElementById('myReportsCount');
+        const drawer = document.getElementById('myReportsDrawer');
+        if (!drawer || !currentUserId) return;
+
+        let list = [];
+        try {
+          const repUrl = 'https://' + 'arbuzniy-zabiaka-default-rtdb.' + 'europe-west1.' + 'firebasedatabase' + '.app/reports.json?t=' + Date.now();
+          const res = await fetch(repUrl);
+          if (res.ok) {
+            const allReports = await res.json();
+            if (Array.isArray(allReports)) {
+              list = allReports.filter(r => r && r.authorId === currentUserId);
+            }
+          }
+        } catch (e) {}
+
+        if (countEl) countEl.textContent = list.length;
+
+        if (!list.length) {
+          drawer.innerHTML = '<div style="color:var(--muted);font-size:0.88rem;padding:12px;">В канале #reports пока нет ваших жалоб</div>';
+          return;
+        }
+
+        drawer.innerHTML = list.map(r => {
+          const status = r.verdict || 'pending';
+          const statusLabel = status === 'approved' ? 'APPROVED' : (status === 'rejected' ? 'REJECTED' : 'PENDING');
+          return `
+            <div class="my-report-card">
+              <div class="my-report-top">
+                <div>
+                  <strong style="color:#fff;">На игрока: ${r.target}</strong>
+                  <span style="color:var(--muted);font-size:0.8rem;margin-left:8px;">${r.date}</span>
+                </div>
+                <span class="verdict-badge ${status}">${statusLabel}</span>
+              </div>
+              <div style="font-size:0.85rem;color:#ccc;"><b>Причина:</b> ${r.reason}</div>
+              <div style="font-size:0.85rem;color:#aaa;">${r.description}</div>
+              ${r.adminComment ? `<div style="margin-top:4px;padding:8px 10px;background:rgba(255,255,255,0.04);border-radius:8px;font-size:0.82rem;color:#e5e5e5;"><b>Разъяснение администрации:</b> ${r.adminComment}</div>` : ''}
+            </div>
+          `;
+        }).join('');
+      }
+
+
+      function updateProfileView() {
+        if (!currentUser) return;
+        document.getElementById('profName').textContent = currentUser;
+        document.getElementById('profDiscordId').textContent = 'Discord ID: ' + (currentUserId || '—');
+
+        const profAv = document.getElementById('profAvatar');
+        if (currentUserAvatar) {
+          profAv.innerHTML = `<img src="${currentUserAvatar}" alt="" style="width:100%;height:100%;object-fit:cover;">`;
+        } else {
+          profAv.textContent = currentUser.toUpperCase();
+        }
+
+        const sourceList = (typeof liveMembers !== 'undefined' && liveMembers.length) ? liveMembers : MEMBERS;
+        const me = sourceList.find(m => m.name.toLowerCase() === currentUser.toLowerCase());
+
+        if (me) {
+          const roleEl = document.getElementById('profRole');
+          roleEl.textContent = me.role || 'Участник';
+          if (me.roleColor) {
+            roleEl.style.borderColor = me.roleColor;
+            roleEl.style.color = me.roleColor;
+            roleEl.style.background = me.roleColor + '18';
+          }
+          document.getElementById('profMessages').textContent = (me.messages || 0).toLocaleString('ru');
+          document.getElementById('profVoice').textContent = (me.voice || 0) + ' ч';
+
+          const stBadge = document.getElementById('profStatusBadge');
+          if (me.online) {
+            stBadge.textContent = 'В сети';
+            stBadge.style.color = '#4ade80';
+            stBadge.style.borderColor = 'rgba(74,222,128,0.4)';
+            stBadge.style.background = 'rgba(74,222,128,0.12)';
+          } else {
+            stBadge.textContent = 'Не в сети';
+            stBadge.style.color = '#f87171';
+            stBadge.style.borderColor = 'rgba(248,113,113,0.4)';
+            stBadge.style.background = 'rgba(248,113,113,0.12)';
+          }
+        }
+
+        const savedClicks = JSON.parse(localStorage.getItem('arbuz_clicker_' + (currentUserId || 'guest')) || '{}');
+        document.getElementById('profClicks').textContent = (savedClicks.total || 0).toLocaleString('ru');
+        document.getElementById('profMaxClicks').textContent = (savedClicks.max || 0).toLocaleString('ru');
+
+        renderMyReports();
+      }
+
+      const toggleRepBtn = document.getElementById('toggleMyReportsBtn');
+      const repDrawer = document.getElementById('myReportsDrawer');
+      if (toggleRepBtn && repDrawer) {
+        toggleRepBtn.addEventListener('click', () => {
+          toggleRepBtn.classList.toggle('open');
+          repDrawer.classList.toggle('open');
+        });
+      }
+
+      updateProfileView();
+      document.querySelector('.tab[data-tab="profile"]')?.addEventListener('click', updateProfileView);
 
       document.getElementById('searchInput').addEventListener('input', (e) => {
         const q = e.target.value.trim().toLowerCase();
@@ -2066,6 +2461,7 @@
         try {
           const res = await fetch(`${FIREBASE_DB_URL}/clicker.json`);
           if (res.ok) {
+            
             const data = await res.json();
             renderLeaderboards(data);
           }
@@ -2365,11 +2761,15 @@
       currentUserId = userId;
       document.body.classList.add('authenticated');
       document.getElementById('userName').textContent = name;
-      const chip = document.getElementById('userChip');
+       const chip = document.getElementById('userChip');
       if (chip) {
-        chip.style.cursor = 'default';
-        chip.style.pointerEvents = 'none';
-        chip.removeAttribute('title');
+        chip.style.cursor = 'pointer';
+        chip.style.pointerEvents = 'auto';
+        chip.title = 'Открыть мой профиль';
+        chip.onclick = () => {
+          const profTab = document.querySelector('.tab[data-tab="profile"]');
+          if (profTab) profTab.click();
+        };
       }
       const avatarEl = document.getElementById('userAvatar');
       if (userId && avatarHash) {
@@ -2486,10 +2886,15 @@
       }
 
       const playerNick = document.getElementById('playerNick').value.trim();
+         const isAnon = document.getElementById('anonReportCheck')?.checked;
+const senderName = isAnon
+  ? '🕵️ Анонимная жалоба'
+  : (currentUser ? `${currentUser}${currentUserId ? ` (ID: ${currentUserId})` : ''}` : 'Anonim');
+
       const reason = document.getElementById('reason').value;
       const description = document.getElementById('description').value.trim();
       const evidence = document.getElementById('evidence').value.trim();
-      const reporter = currentUser || 'Аноним';
+      const reporter = senderName;
 
       btn.disabled = true;
       btn.textContent = 'Отправка...';
