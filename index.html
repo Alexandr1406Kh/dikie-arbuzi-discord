@@ -1858,6 +1858,27 @@
 
       renderStats();
       renderMembers(liveMembers);
+      
+      // Подгружаем мгновенный онлайн и статусы участников от бота из Firebase
+      try {
+        const livePresUrl = 'https://' + 'arbuzniy-zabiaka-default-rtdb.europe-west1' + '.firebasedatabase.app/livePresence.json?t=' + Date.now();
+        const lpRes = await fetch(livePresUrl);
+        if (lpRes.ok) {
+          const lpData = await lpRes.json();
+          if (lpData && typeof lpData.onlineNow === 'number') {
+            SERVER.onlineNow = lpData.onlineNow;
+            if (lpData.statuses) {
+              liveMembers.forEach(m => {
+                if (typeof lpData.statuses[m.name] === 'boolean') {
+                  m.online = lpData.statuses[m.name];
+                }
+              });
+            }
+            renderStats();
+            renderMembers(liveMembers);
+          }
+        }
+      } catch (e) {}
 
 
       document.getElementById('searchInput').addEventListener('input', e => {
