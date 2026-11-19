@@ -2289,8 +2289,10 @@
         }
 
         const savedClicks = JSON.parse(localStorage.getItem('arbuz_clicker_' + (currentUserId || 'guest')) || '{}');
-        document.getElementById('profClicks').textContent = (savedClicks.total || 0).toLocaleString('ru');
-        document.getElementById('profMaxClicks').textContent = (savedClicks.max || 0).toLocaleString('ru');
+        const totalEl = document.getElementById('totalClicksVal');
+        const maxEl = document.getElementById('maxClicksVal');
+        document.getElementById('profClicks').textContent = totalEl ? totalEl.textContent : '0';
+        document.getElementById('profMaxClicks').textContent = maxEl ? maxEl.textContent : '0';
 
         renderMyReports();
       }
