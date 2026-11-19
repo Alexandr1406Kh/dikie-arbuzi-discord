@@ -2360,10 +2360,18 @@
         return;
       }
 
-      const sortedList = [...list].sort((a, b) => {
+           const sortedList = [...list].sort((a, b) => {
+        // 1. Сначала игроки в сети (зелёный кружочек)
         const aOn = a.online === true ? 1 : 0;
         const bOn = b.online === true ? 1 : 0;
         if (bOn !== aOn) return bOn - aOn;
+
+        // 2. Затем по крутости роли (позиция роли на сервере Discord)
+        const aPos = typeof a.rolePosition === 'number' ? a.rolePosition : (parseInt((a.role || '').replace(/\D/g, ''), 10) || 0);
+        const bPos = typeof b.rolePosition === 'number' ? b.rolePosition : (parseInt((b.role || '').replace(/\D/g, ''), 10) || 0);
+        if (bPos !== aPos) return bPos - aPos;
+
+        // 3. При равной роли — по количеству сообщений
         return (b.messages || 0) - (a.messages || 0);
       });
 
